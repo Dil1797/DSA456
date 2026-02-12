@@ -1,0 +1,121 @@
+                                    Linked Lists
+Step 2: Implementation of a Sorted Linked List
+1.	Class Definitions:
+a.	Create a Node class to represent each element.
+b.	Create a SortedLinkedList class to manage operations on the linked list.
+2.	Member Functions: Implement the following methods:
+a.	insert(self, data): To add a new element while maintaining sorted order.
+b.	remove(self, data): To find and remove an element, returning True if successful and False otherwise.
+c.	is_present(self, data): To check for the existence of an element in the list.
+d.	__len__(self): To return the count of elements in the list.
+Here is an example implementation of a sorted linked list in Python:
+class Node:
+    """Class for a node in the linked list."""
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+        self.prev = None  # For doubly linked list
+
+class SortedLinkedList:
+    """Class for a sorted linked list."""
+    def __init__(self):
+        self.head = None
+        self.tail = None  # For doubly linked list
+        self.size = 0
+    
+    def insert(self, data):
+        new_node = Node(data)
+        if not self.head:  # Empty list
+            self.head = new_node
+            self.tail = new_node
+        elif data < self.head.data:  # Insert at beginning
+            new_node.next = self.head
+            self.head.prev = new_node
+            self.head = new_node
+        else:  # Insert in the middle or the end
+            current = self.head
+            while current.next and current.next.data < data:
+                current = current.next
+            new_node.next = current.next
+            new_node.prev = current
+            if current.next:
+                current.next.prev = new_node
+            else:  # Inserting at the end
+                self.tail = new_node
+            current.next = new_node
+        
+        self.size += 1
+
+    def remove(self, data):
+        current = self.head
+        while current:
+            if current.data == data:
+                if current.prev:
+                    current.prev.next = current.next
+                if current.next:
+                    current.next.prev = current.prev
+                if current == self.head:  # Removing head
+                    self.head = current.next
+                if current == self.tail:  # Removing tail
+                    self.tail = current.prev
+                self.size -= 1
+                return True
+            current = current.next
+        return False
+
+    def is_present(self, data):
+        current = self.head
+        while current:
+            if current.data == data:
+                return True
+            if current.data > data:  # Since the list is sorted, we can exit early
+                return False
+            current = current.next
+        return False
+
+    def __len__(self):
+        return self.size
+
+# Main program to test the implementation
+if __name__ == "__main__":
+    sll = SortedLinkedList()
+    sll.insert(5)
+    sll.insert(3)
+    sll.insert(7)
+    print(sll.is_present(3))  # True
+    print(sll.is_present(4))  # False
+    print(len(sll))            # 3
+    sll.remove(5)
+    print(len(sll))            # 2
+
+Step 3: Analysis
+1.	Insert: 
+a.	Singly Linked List: O(n) in the worst case if we're inserting at the end.
+b.	Doubly Linked List: O(n) for the same reason, but allows easier removal and insertion before a given node.
+c.	Overall Complexity: O(f(n)) where f(n) = n since you may need to traverse the list to find the right insertion point.
+2.	Remove:
+a.	Singly Linked List: O(n) since you may have to traverse the entire list to find the node.
+b.	Doubly Linked List: O(n) as well, but removing a node is more straightforward as you have access to both the previous and next node.
+c.	Overall Complexity: O(f(n)), for both implementations.
+3.	Is Present:
+a.	Singly Linked List: O(n) in the worst case since you may need to check every node.
+b.	Doubly Linked List: O(n) for the same reasoning, but the method still benefits from the sorted property to potentially exit early.
+c.	Overall Complexity: O(f(n)) for both implementations.
+4.	Length:
+a.	Singly Linked List: O(1) since the size can be tracked without needing to traverse.
+b.	Doubly Linked List: O(1) for the same reason.
+c.	Overall Complexity: O(1), constant time for both implementations.
+
+1.	Performance Summary:
+i.	For the insert, remove, and is_present methods, both singly and doubly linked lists exhibit O(n) complexity in the worst case due to the need to traverse the list. The difference lies mainly in how they manage node connections during these operations.
+ii.	In a singly linked list, when removing a node, you need a separate traversal to find the preceding node (unless it's the head) since each node only points to the next one. This can lead to an O(n) complexity for remove, as you may need to traverse from the head to find the node before the one you're removing.
+iii.	In a doubly linked list, because each node points to both the next and previous nodes, you can easily update the pointers of adjacent nodes during remove, which may simplify the code but does not change the complexity.
+3.	Memory Overhead:
+i.	A doubly linked list requires more memory due to the additional pointer (prev) in each node. This increased memory footprint can be a disadvantage, especially if the list is large.
+ii.	A singly linked list uses less memory as it only requires one pointer per node, making it more space-efficient.
+4.	When to Use Each:
+i.	Use a singly linked list when memory efficiency is a concern and when you primarily need to traverse the list forward.
+ii.	Use a doubly linked list if you need frequent insertions and deletions from both ends of the list or if you need to traverse the list in both directions, which can simplify certain operations.
+In terms of time complexity analysis, both linked list implementations have similar characteristics, making them suitable for sorted insertions and iterative operations. However, the additional features of doubly linked lists can justify their use in scenarios that require complex manipulations of the list.
+In summary, while T(n) is approximately O(f(n)) for both implementations, the overhead and use cases differ and would inform the decision on which structure to use based on specific requirements.
+
