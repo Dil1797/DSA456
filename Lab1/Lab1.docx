@@ -1,0 +1,91 @@
+                       LAB – 2 (Analysis Function)
+              ==============================
+Function 1 Analysis:
+def function1(number):
+    total = 0;
+    for i in range(0, number):
+        x = (i+1)
+        total += (x*x)
+    return total
+Step 1: Establishing variables and functions
+Let n = number (the input size).
+The function initializes total = 0 and iterates n times.
+Each iteration performs a few basic operations.
+Step 2: Counting operations
+total = 0 → 1 operation
+for i in range(0, number): → n iterations
+Inside the loop:
+x = (i+1) → n operations
+total += (x*x) → n operations
+The return total statement is constant (O(1)).
+Step 3: Establishing the Mathematical Expression for T(n)
+Adding up all operations:
+T(n) = 1+n+n+n+1 = 3n+2
+Step 4: Simplifying the equation
+The dominant term is O(n), so we simplify:
+T(n)=O(n)
+
+Function 2 Analysis:
+def function2(number):
+    return ((number)*(number+1)*(2*number + 1))/6
+Step 1: Establishing variables and functions
+Let n = number (input size).
+The function directly returns a mathematical expression.
+Step 2: Counting operations
+The function executes a few arithmetic operations:
+Multiplication: 3 operations → 
+O(1)
+Addition: 2 operations → 
+O(1)
+Division: 1 operation → 
+O(1)
+Since all of these are constant-time operations, they do not depend on n.
+Step 3: Establishing the Mathematical Expression for T(n)
+T(n)=O(1)
+Step 4: Simplifying the equation
+Since it's a constant number of operations, T(n) = O(1).
+Function 3 Analysis (Bubble Sort):
+def function3(list):
+    for i in range(0, len(list) - 1):
+        for j in range(0, len(list) - 1 - i):
+            if list[j] > list[j + 1]:
+                tmp = list[j]
+                list[j] = list[j + 1]
+                list[j + 1] = tmp
+Step 1: Establishing variables and functions
+Let n = len(list) (input size).
+There are two nested loops, indicating quadratic complexity.
+Step 2: Counting operations
+Outer loop: runs n-1 times → O(n)
+Inner loop: runs (n-1), (n-2), ..., 1 times → sum of first 
+(n−1) integers.
+Step 3: Establishing the Mathematical Expression for T(n)
+T(n)= i=0∑n−1(n−1−i)
+Using the sum formula:
+𝑇(𝑛)=(𝑛−1)𝑛2
+T(n)= 2(n−1)n
+
+Step 4: Simplifying the equation
+The dominant term is 𝑛222n 2, so we simplify:
+T(n)=O(n2)
+
+Function 4 Analysis:
+def function4(number):
+    total = 1
+    for i in range(1, number):
+        total *= (i+1)
+    return total
+Step 1: Establishing variables and functions
+Let n = number (input size).
+The function iterates from 1 to (number - 1).
+Step 2: Counting operations
+total = 1 → 1 operation
+for i in range(1, number): → (n-1) iterations
+Inside the loop:
+total *= (i+1) → (n-1) multiplications
+The return total statement is O(1).
+Step 3: Establishing the Mathematical Expression for T(n)
+T(n) = 1+(n−1)+(n−1)+1 = 2(n−1)+2
+Step 4: Simplifying the equation
+The dominant term is O(n), so we simplify:
+T(n)=O(n)
