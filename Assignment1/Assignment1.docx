@@ -1,0 +1,177 @@
+ Assignment–1: Performance Analysis of Sorting Algorithms
+==================================================
+Step 1: Implement Sorting Algorithms
+We implement Bubble Sort, Selection Sort, Insertion Sort, Quick Sort, and Merge Sort. Each function sorts a list and counts the exact number of operations T(n) executed.
+import random
+import time
+import matplotlib.pyplot as plt
+
+# Bubble Sort
+def bubble_sort(my_list):
+    steps = 0
+    n = len(my_list)
+    for i in range(n - 1):
+        for j in range(n - 1 - i):
+            steps += 2  # Comparison and iteration step
+            if my_list[j] > my_list[j + 1]:
+                my_list[j], my_list[j + 1] = my_list[j + 1], my_list[j]
+                steps += 3  # Swap operation
+    return steps
+
+# Selection Sort
+def selection_sort(my_list):
+    steps = 0
+    n = len(my_list)
+    for i in range(n):
+        min_idx = i
+        for j in range(i + 1, n):
+            steps += 2  # Comparison and iteration
+            if my_list[j] < my_list[min_idx]:
+                min_idx = j
+                steps += 1  # Update min index
+        my_list[i], my_list[min_idx] = my_list[min_idx], my_list[i]
+        steps += 3  # Swap operation
+    return steps
+
+# Insertion Sort
+def insertion_sort(my_list):
+    steps = 0
+    n = len(my_list)
+    for i in range(1, n):
+        key = my_list[i]
+        j = i - 1
+        steps += 3  # Assignments
+        while j >= 0 and my_list[j] > key:
+            my_list[j + 1] = my_list[j]
+            j -= 1
+            steps += 3  # Shifting and decrementing
+        my_list[j + 1] = key
+        steps += 1  # Final assignment
+    return steps
+
+# Quick Sort
+def quick_sort(my_list, low=0, high=None):
+    if high is None:
+        high = len(my_list) - 1
+    steps = 0
+    if low < high:
+        pi, partition_steps = partition(my_list, low, high)
+        steps += partition_steps
+        steps += quick_sort(my_list, low, pi - 1)  # Accumulate steps
+        steps += quick_sort(my_list, pi + 1, high)  # Accumulate steps
+    return steps
+
+def partition(my_list, low, high):
+    pivot = my_list[high]
+    i = low - 1
+    steps = 3
+    for j in range(low, high):
+        steps += 2
+        if my_list[j] < pivot:
+            i += 1
+            my_list[i], my_list[j] = my_list[j], my_list[i]
+            steps += 4
+    my_list[i + 1], my_list[high] = my_list[high], my_list[i + 1]
+    steps += 3
+    return i + 1, steps
+
+# Merge Sort
+def merge_sort(my_list):
+    steps = 0
+    if len(my_list) > 1:
+        mid = len(my_list) // 2
+        left_half = my_list[:mid]
+        right_half = my_list[mid:]
+
+        steps += merge_sort(left_half)  # Accumulate steps from left
+        steps += merge_sort(right_half)  # Accumulate steps from right
+
+        i = j = k = 0
+        while i < len(left_half) and j < len(right_half):
+            steps += 2
+            if left_half[i] < right_half[j]:
+                my_list[k] = left_half[i]
+                i += 1
+            else:
+                my_list[k] = right_half[j]
+                j += 1
+            k += 1
+            steps += 3
+        while i < len(left_half):
+            my_list[k] = left_half[i]
+            i += 1
+            k += 1
+            steps += 3
+        while j < len(right_half):
+            my_list[k] = right_half[j]
+            j += 1
+            k += 1
+            steps += 3
+    return steps
+Step 2: Testing Best, Worst, and Average Cases
+def test_cases():
+    sizes = [10, 50, 100, 500, 1000, 5000, 10000]
+    algorithms = [bubble_sort, selection_sort, insertion_sort, quick_sort, merge_sort]
+
+    for algo in algorithms:
+        print(f"\nTesting {algo.__name__}...\n")
+        for n in sizes:
+            sorted_list = list(range(n))  # Best case
+            reverse_list = list(range(n, 0, -1))  # Worst case
+            random_lists = [random.sample(range(n), n) for _ in range(100)]  # Average case
+
+            best = algo(sorted_list.copy())
+            worst = algo(reverse_list.copy())
+            avg = sum(algo(lst.copy()) for lst in random_lists) / 100
+
+            print(f"n = {n}: Best = {best}, Worst = {worst}, Avg = {avg:.2f}")
+
+test_cases()
+Step 3: Plotting T(n) vs. n
+sizes = [10, 50, 100, 500, 1000, 5000, 10000]
+algorithms = [bubble_sort, selection_sort, insertion_sort, quick_sort, merge_sort]
+
+for algo in algorithms:
+    best_cases, worst_cases, avg_cases = [], [], []
+
+    for n in sizes:
+        sorted_list = list(range(n))
+        reverse_list = list(range(n, 0, -1))
+        random_lists = [random.sample(range(n), n) for _ in range(100)]
+
+        best_cases.append(algo(sorted_list.copy()))
+        worst_cases.append(algo(reverse_list.copy()))
+        avg_cases.append(sum(algo(lst.copy()) for lst in random_lists) / 100)
+
+    plt.plot(sizes, worst_cases, label=f"{algo.__name__} Worst", linestyle='dashed')
+    plt.plot(sizes, avg_cases, label=f"{algo.__name__} Avg", linestyle='dotted')
+    plt.plot(sizes, best_cases, label=f"{algo.__name__} Best", linestyle='solid')
+
+plt.xlabel("Input Size (n)")
+plt.ylabel("T(n)")
+plt.legend()
+plt.title("Sorting Algorithm Performance")
+plt.show()
+Step 4: Execution Time Analysis
+for algo in algorithms:
+    times = []
+    for n in sizes:
+        worst_case_list = list(range(n, 0, -1))  # Worst case scenario
+        start = time.time()
+        algo(worst_case_list.copy())  # Use copy to avoid modifying original
+        end = time.time()
+        times.append(end - start)
+
+    plt.plot(sizes, times, label=f"{algo.__name__}")
+
+plt.xlabel("Input Size (n)")
+plt.ylabel("Execution Time (seconds)")
+plt.legend()
+plt.title("Execution Time of Sorting Algorithms (Worst Case)")
+plt.show()
+
+Final Report
+Bubble, Selection, and Insertion Sort have O(n²) complexity.
+Quick Sort has O(n log n) on average but O(n²) in the worst case.
+Merge Sort has O(n log n) for all cases.
+The time execution curve should match theoretical complexities.
