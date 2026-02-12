@@ -1,0 +1,102 @@
+Assignment – 3
+==================
+Answer: Here I have developed the following class member functions for a Binary Search Tree (BST) using the provided code.
+We are working with a Binary Search Tree (BST) class in Python, and we will implement four additional methods:
+1. `BST_to_list()` – Converts the BST into a sorted list using in-order traversal.
+2. `height()` – Returns the height of the tree using recursion.
+3. `max()` – Returns the maximum value in the BST.
+4. `min()` – Returns the minimum value in the BST.
+
+Here I have implemented those functions inside the existing `BST` class:
+class BST:
+    class Node:
+        def __init__(self, data=None, left=None, right=None):
+            self.data = data
+            self.left = left
+            self.right = right
+
+    def __init__(self):
+        self.root = None
+
+    def insert(self, data):
+        if self.root is None:
+            self.root = BST.Node(data)
+        else:
+            curr = self.root
+            inserted = False
+            while not inserted:
+                if data < curr.data:
+                    if curr.left is not None:
+                        curr = curr.left
+                    else:
+                        curr.left = BST.Node(data)
+                        inserted = True
+                else:
+                    if curr.right is not None:
+                        curr = curr.right
+                    else:
+                        curr.right = BST.Node(data)
+                        inserted = True
+
+    def search(self, data):
+        curr = self.root
+        while curr is not None:
+            if data < curr.data:
+                curr = curr.left
+            elif data > curr.data:
+                curr = curr.right
+            else:
+                return curr
+        return None
+# Function 1: Convert BST to a sorted list
+    def BST_to_list(self):
+        result = []
+
+        def in_order(node):
+            if node:
+                in_order(node.left)
+                result.append(node.data)
+                in_order(node.right)
+
+        in_order(self.root)
+        return result
+
+    # Function 2: Height of the BST (recursive)
+    def height(self):
+        def get_height(node):
+            if node is None:
+                return -1  # Optional: use 0 if height of a single-node tree = 0
+            return 1 + max(get_height(node.left), get_height(node.right))
+
+        return get_height(self.root)
+
+    # Function 3: Max value in the BST
+    def max(self):
+        if self.root is None:
+            return None
+        curr = self.root
+        while curr.right is not None:
+            curr = curr.right
+        return curr.data
+
+    # Function 4: Min value in the BST
+    def min(self):
+        if self.root is None:
+            return None
+        curr = self.root
+        while curr.left is not None:
+            curr = curr.left
+        return curr.data
+Example Usage:
+my_bst = BST()
+my_bst.insert(5)
+my_bst.insert(6)
+my_bst.insert(4)
+my_bst.insert(7)
+my_bst.insert(3)
+my_bst.insert(8)
+
+print("Sorted List:", my_bst.BST_to_list())  # [3, 4, 5, 6, 7, 8]
+print("Height:", my_bst.height())            # 3
+print("Max:", my_bst.max())                  # 8
+print("Min:", my_bst.min())                  # 3
