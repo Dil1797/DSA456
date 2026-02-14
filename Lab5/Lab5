@@ -1,0 +1,46 @@
+                                      LAB – 5
+                         ===================
+Q1: Implementing a Double Hashed Table
+Answer: This problem involves inserting two new key-value pairs into a partially populated double hash table using the provided hash functions, resolving collisions as necessary.
+We're given a double hash function and a partially populated hash table.  We need to insert two new key-value pairs: (0, "Plum") and (9, "Strawberry").
+1.	hash1(key) = key % 11: This gives the initial index.
+2.	hash2(key) = 7 - (key % 7): This is used for collision resolution. If “hash1” produces a collision (occupied index), we use “hash2” to probe linearly.
+Insert (0, "Plum"):
+1.	“hash1(0) = 0 % 11 = 0”. Index 0 is already occupied.
+2.	“hash2(0) = 7 - (0 % 7) = 7”. Index 7 is empty, so we place ("Plum", 0) at index 7.
+Insert (9, "Strawberry"):
+1.	“hash1(9) = 9 % 11 = 9”. Index 9 is occupied.
+2.	“hash2(9) = 7 - (9 % 7) = 7 - 2 = 5”. Index 5 is occupied.
+3.	We continue probing linearly using “hash2”: (5 + hash2(9)) % 11 = (5 + 5) % 11 = 10 % 11 = 10. Index 10 is empty, so we place ("Strawberry", 9) at index 10.
+Updated Table:
+Index		Key		Value
+0		11		Apple
+1		13		Banana
+2		25		Cherry
+3		
+4		5	
+5		
+6		22		Date
+7		0		Plum
+8		
+9		39		Elderberry
+10		9		Strawberry
+
+Q2: Representing a Graph Using a Matrix
+Answer: This problem requires representing a given graph using an adjacency matrix and an adjacency list, and then identifying all cycles within the graph.
+The provided graph shows 5 nodes.
+Adjacency Matrix:  An adjacency matrix is a square matrix where the element at row i and column j represents the connection between node i and node j.  A '1' indicates a connection, and a '0' indicates no connection.
+    0 1 2 3 4
+0  0 1 0 1 0
+1  1 0 1 0 0
+2  0 1 0 1 0
+3  1 0 1 0 1
+4  0 0 0 1 0 
+Adjacency List: An adjacency list represents each node and its neighbors.
+a.	0: 1, 3
+b.	1: 0, 2
+c.	2: 1, 3
+d.	3: 0, 2, 4
+e.	4: 3
+Cycles: A cycle in a graph is a path that starts and ends at the same node, with no repeated edges or nodes in between.
+There is only one cycle in this graph: 0 → 1 → 2 → 3 → 0
