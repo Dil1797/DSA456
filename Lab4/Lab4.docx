@@ -1,0 +1,125 @@
+           Stack and Queue Implementation in Python
+============================================
+Here I am going to present an implementation of:
+•	A Stack using a Singly Linked List (without sentinels)
+•	A Queue using a Circular Array to ensure O(1) enqueue and dequeue operations.
+Both data structures include the necessary operations: push(), pop(), enqueue(), dequeue(), isFull(), isEmpty(), and size retrieval functions.
+Linked List for Stack: The stack is implemented using a singly linked list because it allows dynamic memory allocation. Unlike arrays, which require a fixed size, linked lists can grow as needed. This eliminates wasted memory and avoids resizing issues.
+Circular Array for Queue: The queue is implemented using a circular array to ensure that both enqueue and dequeue operations run in constant O(1) time. A regular array would require shifting elements when dequeuing, which is O(n) in complexity. Using a circular structure avoids this inefficiency by reusing array space efficiently.
+
+1.	Stack Implementation (Linked List)
+class Node:
+    """Node class for linked list implementation of Stack."""
+    def __init__(self, data):
+        self.data = data
+        self.next = None  # Pointer to next node
+
+class Stack:
+    """Stack implemented using a singly linked list."""
+    def __init__(self, capacity):
+        self.top = None  # Top of stack
+        self.capacity = capacity  # Maximum stack size
+        self.size = 0  # Current size of stack
+
+    def push(self, n):
+        """Inserts a new element at the top of the stack."""
+        if self.isFull():
+            raise OverflowError("Stack is full")
+        new_node = Node(n)
+        new_node.next = self.top
+        self.top = new_node
+        self.size += 1
+
+    def pop(self):
+        """Removes and returns the top element of the stack."""
+        if self.isEmpty():
+            raise IndexError("Stack is empty")
+        popped_data = self.top.data
+        self.top = self.top.next  # Move top pointer
+        self.size -= 1
+        return popped_data
+
+    def isFull(self):
+        """Checks if the stack is full."""
+        return self.size == self.capacity
+
+    def isEmpty(self):
+        """Checks if the stack is empty."""
+        return self.size == 0
+
+    def stack_size(self):
+        """Returns the number of elements in the stack."""
+        return self.size
+
+# Testing Stack
+stack = Stack(3)
+stack.push(10)
+stack.push(20)
+print(stack.pop())  # Expected Output: 20
+print(stack.stack_size())  # Expected Output: 1
+# Additional Stack Tests 
+stack.push(30) 
+stack.push(40) 
+print(stack.isFull()) # Expected Output: True 
+print(stack.pop()) # Expected Output: 40 
+print(stack.isEmpty()) # Expected Output: False
+Time Complexity Analysis for Stack
+•	Push: O(1) (Inserting at the head).
+•	Pop: O(1) (Removing from the head).
+•	isFull, isEmpty, stack_size: O(1).
+2.	Queue Implementation (Circular Array):
+class Queue:
+    """Queue implemented using a circular array."""
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.queue = [None] * capacity  # Fixed-size array
+        self.front = 0  # Front pointer
+        self.rear = -1  # Rear pointer
+        self.size = 0  # Number of elements
+
+    def enqueue(self, n):
+        """Inserts an element at the rear of the queue."""
+        if self.isFull():
+            raise OverflowError("Queue is full")
+        self.rear = (self.rear + 1) % self.capacity  # Circular increment
+        self.queue[self.rear] = n
+        self.size += 1
+
+    def dequeue(self):
+        """Removes and returns the front element of the queue."""
+        if self.isEmpty():
+            raise IndexError("Queue is empty")
+        dequeued_value = self.queue[self.front]
+        self.queue[self.front] = None  # Optional: Clear reference
+        self.front = (self.front + 1) % self.capacity  # Circular increment
+        self.size -= 1
+        return dequeued_value
+
+    def isFull(self):
+        """Checks if the queue is full."""
+        return self.size == self.capacity
+
+    def isEmpty(self):
+        """Checks if the queue is empty."""
+        return self.size == 0
+
+    def queue_size(self):
+        """Returns the number of elements in the queue."""
+        return self.size
+
+# Testing Queue
+queue = Queue(3)
+queue.enqueue(10)
+queue.enqueue(20)
+print(queue.dequeue())  # Expected Output: 10
+print(queue.queue_size())  # Expected Output: 1
+# Additional Queue Tests 
+queue.enqueue(30) 
+queue.enqueue(40)
+print(queue.isFull()) # Expected Output: True 
+print(queue.dequeue()) # Expected Output: 20 
+print(queue.isEmpty()) # Expected Output: False
+Time Complexity Analysis for Queue
+•	Enqueue: O(1) (Adding at the rear in a circular manner).
+•	Dequeue: O(1) (Removing from the front).
+•	isFull, isEmpty, queue_size: O(1).
